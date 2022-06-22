@@ -118,7 +118,7 @@ def deploy_volume(yamls):
 
 def undeploy_volume(yamls):
     print("######################")
-    print(f"We are going to UNDEPLOY the PersistentVolume Persi and PersistentVolumeClaim from the yaml file: {yamls}")
+    print(f"We are going to UNDEPLOY the PersistentVolume and PersistentVolumeClaim from the yaml file: {yamls}")
     print("######################")
 
     config.load_kube_config()
@@ -131,11 +131,13 @@ def undeploy_volume(yamls):
                 if partial_yaml["kind"] == "PersistentVolume":
                     pv_name = partial_yaml["metadata"]["name"]
                     resp = k8s_core_api.delete_persistent_volume(name=pv_name)
-                    print(f"Deployment '{pv_name}' deleted. Status={resp.status}")
+                    # print(f"Deployment '{pv_name}' deleted. Status={resp.status}")
+                    print(f"Deployment '{pv_name}' deleted.")
                 elif partial_yaml["kind"] == "PersistentVolumeClaim":
                     pvc_name = partial_yaml["metadata"]["name"]
                     resp = k8s_core_api.delete_namespaced_persistent_volume_claim(name=pvc_name, namespace=partial_yaml["metadata"]["namespace"])
-                    print(f"Service '{pvc_name}' deleted. Status={resp.status}")
+                    # print(f"Service '{pvc_name}' deleted. Status={resp.status}")
+                    print(f"Service '{pvc_name}' deleted.")
                     print("---")
             except ApiException as err:
                 api_exception_body = json.loads(err.body)
