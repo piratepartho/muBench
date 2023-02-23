@@ -1,108 +1,144 @@
 {
-	"s0": {
-		"external_services": [{
-				"seq_len": 100,
-				"services": [
-					"s1"
-				],
-				"probabilities": {
-					"s1": 1
-				}
-			},
-			{
-				"seq_len": 1,
-				"services": [
-					"sdb1"
-				],
-				"probabilities": {
-					"sdb1": 1
-				}
-			}
-		],
-		"internal_service": {
-			"compute_pi": {
-				"mean_bandwidth": 10,
-				"range_complexity": [
-					50,
-					100
-				]
-			}
-		},
-		"request_method": "rest",
-		"workers": 4,
-		"threads": 16,
-		"cpu-requests": "1000m",
-		"cpu-limits": "1000m",
-		"pod_antiaffinity": false,
-		"replicas": 1
-	},
-	"sdb1": {
-		"external_services": [],
-		"internal_service": {
-			"compute_pi": {
-				"mean_bandwidth": 1,
-				"range_complexity": [
-					1,
-					10
-				]
-			}
-		},
-		"request_method": "rest",
-		"workers": 4,
-		"threads": 16,
-		"pod_antiaffinity": false,
-		"replicas": 1,
-		"cpu-requests": "1000m",
-		"cpu-limits": "1000m"
-	},
-	"s1": {
-		"external_services": [{
-			"seq_len": 100,
-			"services": [
-				"s2"
-			],
-			"probabilities": {
-				"s2": 1
-			}
-		}],
-		"internal_service": {
-			"colosseum": {
-				"mean_bandwidth": 10
-			}
-		},
-		"request_method": "rest",
-		"workers": 4,
-		"threads": 16,
-		"cpu-requests": "1000m",
-		"cpu-limits": "1000m",
-		"pod_antiaffinity": false,
-		"replicas": 1
-	},
-	"s2": {
-		"external_services": [{
-			"seq_len": 1,
-			"services": [
-				"sdb1"
-			],
-			"probabilities": {
-				"sdb1": 1
-			}
-		}],
-		"internal_service": {
-			"compute_pi": {
-				"mean_bandwidth": 15,
-				"range_complexity": [
-					10,
-					20
-				]
-			}
-		},
-		"request_method": "rest",
-		"workers": 4,
-		"threads": 16,
-		"cpu-requests": "1000m",
-		"cpu-limits": "1000m",
-		"pod_antiaffinity": false,
-		"replicas": 1
-	}
+  "s0": {
+    "external_services": [
+      {
+        "seq_len": 100,
+        "services": [
+          "s1"
+        ],
+        "probabilities": {
+          "s1": 1.0
+        }
+      }
+    ],
+    "internal_service": {
+      "colosseum": {}
+    },
+    "request_method": "rest",
+    "workers": 4,
+    "threads": 16,
+    "cpu-limits": "1000m",
+    "cpu-requests": "1000m"
+  },
+  "s1": {
+    "external_services": [
+      {
+        "seq_len": 100,
+        "services": [
+          "s2",
+          "s5"
+        ],
+        "probabilities": {
+          "s2": 1.0,
+          "s5": 1.0
+        }
+      }
+    ],
+    "internal_service": {
+      "colosseum": {}
+    },
+    "request_method": "rest",
+    "workers": 4,
+    "threads": 16,
+    "cpu-limits": "1000m",
+    "cpu-requests": "1000m"
+  },
+  "s2": {
+    "external_services": [
+      {
+        "seq_len": 100,
+        "services": [
+          "s3",
+          "s4"
+        ],
+        "probabilities": {
+          "s3": 1.0,
+          "s4": 1.0
+        }
+      }
+    ],
+    "internal_service": {
+      "colosseum": {}
+    },
+    "request_method": "rest",
+    "workers": 4,
+    "threads": 16,
+    "cpu-limits": "1000m",
+    "cpu-requests": "1000m"
+  },
+  "s3": {
+    "external_services": [],
+    "internal_service": {
+      "colosseum": {}
+    },
+    "request_method": "rest",
+    "workers": 4,
+    "threads": 16,
+    "cpu-limits": "1000m",
+    "cpu-requests": "1000m"
+  },
+  "s4": {
+    "external_services": [
+      {
+        "seq_len": 100,
+        "services": [
+          "s6"
+        ],
+        "probabilities": {
+          "s6": 1.0
+        }
+      }
+    ],
+    "internal_service": {
+      "colosseum": {}
+    },
+    "request_method": "rest",
+    "workers": 4,
+    "threads": 16,
+    "cpu-limits": "1000m",
+    "cpu-requests": "1000m"
+  },
+  "s5": {
+    "external_services": [],
+    "internal_service": {
+      "colosseum": {}
+    },
+    "request_method": "rest",
+    "workers": 4,
+    "threads": 16,
+    "cpu-limits": "1000m",
+    "cpu-requests": "1000m"
+  },
+  "s6": {
+    "external_services": [
+      {
+        "seq_len": 100,
+        "services": [
+          "s7"
+        ],
+        "probabilities": {
+          "s7": 1.0
+        }
+      }
+    ],
+    "internal_service": {
+      "colosseum": {}
+    },
+    "request_method": "rest",
+    "workers": 4,
+    "threads": 16,
+    "cpu-limits": "1000m",
+    "cpu-requests": "1000m"
+  },
+  "s7": {
+    "external_services": [],
+    "internal_service": {
+      "colosseum": {}
+    },
+    "request_method": "rest",
+    "workers": 4,
+    "threads": 16,
+    "cpu-limits": "1000m",
+    "cpu-requests": "1000m"
+  }
 }

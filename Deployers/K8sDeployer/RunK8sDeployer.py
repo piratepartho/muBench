@@ -102,15 +102,24 @@ if not os.path.exists(f"{builder_module_path}/yamls"):
     folder_not_exist = True
 folder = f"{builder_module_path}/yamls"
 
-
+# TestLUCAAA - Togliere questa parte
 if folder_not_exist or len(os.listdir(folder)) == 0:
+# Fine test LUCAAA
+# if True:
 
     # keyboard_input = input("\nDirectory empty, wanna DEPLOY? (y)").lower() or "y"
     keyboard_input = "y"
 
     if keyboard_input == "y" or keyboard_input == "yes":
         # Create YAML files
-        updated_folder_items, work_model = create_deployment_config()   
+        updated_folder_items, work_model = create_deployment_config()
+
+        # TestLUCAAA - Togliere questa parte
+        # from pprint import pprint
+        # pprint(work_model["s1"])
+        # exit()
+        # Fine test LUCAAA
+
         # Create and deploy configmaps for internal service custom function and workmodel.json
         K8sYamlDeployer.deploy_configmap(k8s_parameters,K8sYamlDeployer.create_workmodel_configmap_data(k8s_parameters,work_model))
         K8sYamlDeployer.deploy_configmap(k8s_parameters,K8sYamlDeployer.create_internal_service_configmap_data(params))

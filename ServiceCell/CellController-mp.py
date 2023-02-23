@@ -262,7 +262,8 @@ class gRPCThread(Thread, pb2_grpc.MicroServiceServicer):
 
 if __name__ == '__main__':
     if request_method == "rest":
-        init_REST(app)
+        proxy = globalDict['work_model'][ID].get("proxy", False)
+        init_REST(app, proxy)
         # Start Gunicorn HTTP REST Server (multi-process)
         options_gunicorn = {
             'bind': '%s:%s' % ('0.0.0.0', 8080),

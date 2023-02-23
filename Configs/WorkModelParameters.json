@@ -21,7 +21,7 @@
          "value":{
             "name": "colosseum",
             "recipient": "service",
-            "probability": 0.0,
+            "probability": 1,
             "parameters":{},
             "workers":4,
             "threads":16,
@@ -34,7 +34,7 @@
          "value": {
             "name": "loader",
             "recipient": "database",
-            "probability":1,
+            "probability":0.0,
             "parameters": {
                "cpu_stress": {"run":false,"range_complexity": [100, 100], "thread_pool_size": 1, "trials": 1},
                "memory_stress":{"run":false, "memory_size": 10000, "memory_io": 1000},
@@ -53,7 +53,7 @@
          "value": {
             "name": "loader",
             "recipient": "service",
-            "probability":1,
+            "probability":0,
             "parameters": {
                "cpu_stress": {"run":true,"range_complexity": [1000, 1000], "thread_pool_size": 1, "trials": 1},
                "memory_stress":{"run":false, "memory_size": 10000, "memory_io": 1000},
@@ -65,7 +65,7 @@
             "threads":16,
             "cpu-requests": "1000m",
             "cpu-limits": "1000m",
-            "replicas": 2
+            "replicas": 1
          }
       },
       "request_method":{
@@ -85,11 +85,11 @@
       },
       "ServiceMeshFilePath": {
          "type": "metadata", 
-         "value":"SimulationWorkspace/servicemesh.json"
+         "value":"../SimulationWorkspace/servicemesh.json"
       },
       "OutputPath": {
          "type":"metadata",
-         "value":"SimulationWorkspace"
+         "value":"../SimulationWorkspace"
       }
    }
 }

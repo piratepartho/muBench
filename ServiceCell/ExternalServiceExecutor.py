@@ -13,10 +13,12 @@ from pprint import pprint
 service_stub = dict()
 s = requests.Session()
 
-def init_REST(app):
+def init_REST(app, proxy):
     app.logger.info("Init REST function")
     global request_function
     request_function = request_REST
+    if proxy:
+        s.proxies.update({"http": proxy})
 
 def init_gRPC(my_service_mesh, workmodel, server_port, app):
     app.logger.info("Init gRPC function")

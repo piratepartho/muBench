@@ -1,14 +1,14 @@
 {
    "ServiceMeshParameters": {
-      "vertices": 2,
+      "vertices": 8,
       "external_service_groups": 1,
       "power": 0.05,
       "seq_len": 100,
       "zero_appeal": 3.25,
       "service_probability": {"model":"const", "params":{"value":1}},
       "dbs": {
-         "nodb": 0.2,
-         "sdb1": 0.8,
+         "nodb": 1.0,
+         "sdb1": 0.0,
          "sdb2": 0.0
       }
    },

@@ -32,6 +32,10 @@ def customization_work_model(model, k8s_parameters):
         if "memory-limits" in k8s_parameters.keys():
             # override memory-limits value of workmodel.json
             model[service].update({"memory-limits": k8s_parameters['memory-limits']})
+        if "proxy" in k8s_parameters.keys():
+            # override proxy value of workmodel.json
+            model[service].update({"proxy": k8s_parameters['proxy']})
+
     print("Work Model Updated!")
 
 
