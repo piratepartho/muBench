@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cache-nginx
+  namespace: {{NAMESPACE}}
+data:
+  nginx.conf: |
+    user nginx;
+    worker_processes  1;
+    error_log  /etc/nginx/error.log;
+    events {
+      worker_connections  10240;
+    }
+    http {
+        sendfile on;
+        log_format  main
+                '[GATEWAY] - '
+                '$remote_addr - - '
+                '[$time_local] '
+                '"$request_method '
+                '$request_uri" '
+                '$status -'
+                'referer:$http_referer\t'
+                'forwardedfor:$http_x_forwarded_for\t'
+                ' http:/$request_uri.{{NAMESPACE}}.svc.cluster.local';
+
+        log_format rt_cache '$remote_addr - $upstream_cache_status [$time_local]  '
+                            '"$request" $status $body_bytes_sent '
+                                                '"$http_referer" "$http_user_agent"';
+
+        access_log  /etc/nginx/access.log main;
+        #access_log  /var/log/nginx/access.log main;
+        access_log on;
+    
+        proxy_cache_path /tmp/cache levels=1:2 keys_zone=my_cache:10m max_size=10g inactive=10m use_temp_path=off;
+        server {
+                listen       80;
+                server_name  _;
+                location / {
+                    resolver {{RESOLVER}};
+                    proxy_cache my_cache;
+                    proxy_cache_valid any 5m;
+                    proxy_buffering on;
+                    add_header X-Proxy-Cache $upstream_cache_status;
+                    proxy_cache_bypass $http_cache_control;
+                    proxy_cache_lock on;
+                    #proxy_set_header Header Value;
+                    proxy_pass http://$http_host$uri$is_args$args;
+                    proxy_http_version 1.1;
+                }
+        }
+    }

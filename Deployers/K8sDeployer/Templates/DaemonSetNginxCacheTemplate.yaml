@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: cache-nginx
+  namespace: {{NAMESPACE}}
+  labels:
+    app: cache-nginx
+    version: "1.0"
+spec:
+  selector:
+    matchLabels:
+        app: cache-nginx
+  template:
+    metadata:
+      labels:
+        app: cache-nginx
+        version: "1.0"
+    spec:
+      tolerations:
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule
+#      - key: node-role.kubernetes.io/master
+#        operator: Exists
+#        effect: NoSchedule
+      containers:
+      - name: cache-nginx
+        image: nginx
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - mountPath: /etc/nginx/nginx.conf
+          readOnly: true
+          name: config-volume
+          subPath: nginx.conf
+        - mountPath: /var/log/nginx
+          name: log
+      volumes:
+      - name: config-volume
+        configMap:
+          name: cache-nginx
+      - name: log
+        emptyDir: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cache-nginx
+  namespace: {{NAMESPACE}}
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+  selector:
+    app: cache-nginx
+  topologyKeys:
+    - kubernetes.io/hostname
+    - topology.kubernetes.io/zone
+    - "*"
+
+

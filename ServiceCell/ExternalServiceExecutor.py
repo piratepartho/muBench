@@ -18,7 +18,7 @@ def init_REST(app, proxy):
     global request_function
     request_function = request_REST
     if proxy:
-        s.proxies.update({"http": proxy})
+        s.proxies.update({"http": f"http://{proxy}"})
 
 def init_gRPC(my_service_mesh, workmodel, server_port, app):
     app.logger.info("Init gRPC function")
@@ -51,7 +51,7 @@ def request_REST(service,id,work_model,s,trace,query_string, app, jaeger_context
                 return s.post(f'http://{work_model[service_no_escape]["url"]}{work_model[service_no_escape]["path"]}',data=json_payload,headers=headers)
             else:
                 return s.post(f'http://{work_model[service_no_escape]["url"]}{work_model[service_no_escape]["path"]}?{query_string}',data=json_payload,headers=headers)
-        elif  len(query_string)>0:
+        elif len(query_string) > 0:
             # request with enclosed behaviour information
             return s.get(f'http://{work_model[service_no_escape]["url"]}{work_model[service_no_escape]["path"]}?{query_string}', headers=jaeger_context)  
         else:

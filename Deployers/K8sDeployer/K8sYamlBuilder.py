@@ -32,9 +32,9 @@ def customization_work_model(model, k8s_parameters):
         if "memory-limits" in k8s_parameters.keys():
             # override memory-limits value of workmodel.json
             model[service].update({"memory-limits": k8s_parameters['memory-limits']})
-        if "proxy" in k8s_parameters.keys():
+        if "proxy" in k8s_parameters.keys() and k8s_parameters['proxy']:
             # override proxy value of workmodel.json
-            model[service].update({"proxy": k8s_parameters['proxy']})
+            model[service].update({"proxy": f"cache-nginx.{k8s_parameters['namespace']}.svc.{k8s_parameters['cluster_domain']}.local"})
 
     print("Work Model Updated!")
 
@@ -79,9 +79,9 @@ def create_deployment_yaml_files(model, k8s_parameters, nfs, output_path):
             else:
                 f = f.replace("{{TN}}", "\'4\'")
             
-            rank_string='' # ranck string is used to order the yaml file as a funciont of the cpu-requests 
-            if  len(set(model[service].keys()).intersection({"cpu-limits","memory-limits","cpu-requests","memory-requests"})):
-                s=""
+            rank_string = ''  # ranck string is used to order the yaml file as a funciont of the cpu-requests
+            if len(set(model[service].keys()).intersection({"cpu-limits","memory-limits","cpu-requests","memory-requests"})):
+                s = ""
                 if "cpu-requests" in model[service].keys() or "memory-requests" in model[service].keys():
                     s = s + "\n            requests:"
                     if "cpu-requests" in model[service].keys():
@@ -122,6 +122,21 @@ def create_deployment_yaml_files(model, k8s_parameters, nfs, output_path):
         f = f.replace("{{NAMESPACE}}", namespace)
 
     with open(f"{output_path}/yamls/DeploymentNginxGw.yaml", "w") as file:
+        file.write(f)
+
+    with open(f"{K8s_YAML_BUILDER_PATH}/Templates/DaemonSetNginxCacheTemplate.yaml", "r") as file:
+        f = file.read()
+        f = f.replace("{{NAMESPACE}}", namespace)
+
+    with open(f"{output_path}/yamls/DaemonSetNginxCache.yaml", "w") as file:
+        file.write(f)
+
+    with open(f"{K8s_YAML_BUILDER_PATH}/Templates/ConfigMapNginxCacheTemplate.yaml", "r") as file:
+        f = file.read()
+        f = f.replace("{{NAMESPACE}}", namespace)
+        f = f.replace("{{RESOLVER}}", k8s_parameters["dns-resolver"])
+
+    with open(f"{output_path}/yamls/ConfigMapNginxCache.yaml", "w") as file:
         file.write(f)
 
     print("Deployment Created!")
