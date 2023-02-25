@@ -116,7 +116,7 @@ if folder_not_exist or len(os.listdir(folder)) == 0:
 
         # TestLUCAAA - Togliere questa parte
         # from pprint import pprint
-        # pprint(work_model["s1"])
+        # pprint(work_model["s0"])
         # exit()
         # Fine test LUCAAA
 
@@ -125,6 +125,7 @@ if folder_not_exist or len(os.listdir(folder)) == 0:
         K8sYamlDeployer.deploy_configmap(k8s_parameters,K8sYamlDeployer.create_internal_service_configmap_data(params))
         # Deploy YAML files
         K8sYamlDeployer.deploy_nginx_gateway(folder)
+        K8sYamlDeployer.deploy_nginx_cache(folder)
         K8sYamlDeployer.deploy_items(folder, st=k8s_parameters['sleep'])
     else:
         print("...\nOk you do not want to DEPLOY stuff! Bye!")
@@ -136,7 +137,8 @@ else:
     keyboard_input = input("Do you want to UNDEPLOY yamls of the old application first, delete the files and then start the new applicaiton ? (n) ") or "n"
     if keyboard_input == "y" or keyboard_input == "yes":
         K8sYamlDeployer.undeploy_items(folder)
-        #K8sYamlDeployer.undeploy_nginx_gateway(folder)
+        K8sYamlDeployer.undeploy_nginx_gateway(folder)
+        K8sYamlDeployer.undeploy_nginx_cache(folder)
         K8sYamlDeployer.undeploy_configmap("internal-services",k8s_parameters)
         K8sYamlDeployer.undeploy_configmap("workmodel",k8s_parameters)
         remove_files(folder)
